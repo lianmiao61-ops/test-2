@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<title>待办清单</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui}
+body{max-width:800px;margin:30px auto;padding:0 20px;background:#f7f8fa}
+.item{background:#fff;padding:14px 18px;border-radius:10px;margin:10px 0;border:1px solid #e5e7eb}
+h2{color:#222}
+.tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:12px;margin-right:6px}
+.tag‑design{background:#dbeafe;color:#1d4ed8}
+</style>
+</head>
+<body>
+<h2>📋待办清单列表</h2>
+<div id="list"></div>
+
+<script>
+//读取同目录json文件
+fetch('./待办清单.json')
+.then(res=>res.json())
+.then(data=>{
+  const dom=document.getElementById('list');
+  data.forEach(row=>{
+    const div=document.createElement('div');
+    div.className='item';
+    div.innerHTML=`
+      <div><strong>${row.title}</strong></div>
+      <div style="margin:6px 0;color:#444;font-size:14px">${row.desc}</div>
+      <div>
+        <span class="tag tag‑design">${row.category}</span>
+        <span class="tag">状态：${row.status}</span>
+        <span class="tag">优先级：${row.priority}</span>
+        <span class="tag">进度：${row.progress}%</span>
+        <span class="tag">截止：${row.deadline}</span>
+      </div>
+    `;
+    dom.appendChild(div);
+  })
+})
+.catch(err=>{
+  document.getElementById('list').innerText='读取json失败，请确保html和json放在同一个文件夹';
+  console.error(err);
+})
+</script>
+</body>
+</html>
